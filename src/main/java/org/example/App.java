@@ -40,18 +40,15 @@ public class App {
                     String url = "jdbc:mysql://127.0.0.1:3306/Membership_board?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul&useOldAliasMetadataBehavior=true&zeroDateTimeNehavior=convertToNull";
 
                     conn = DriverManager.getConnection(url, "root", "");
+
+
+
+
                     String sql = "INSERT INTO Membership ";
                     sql += "(`name`, age, gender, birth, userID, `password`) ";
-                    sql += "VALUES (?, ?, ?, ?, ?, ?)";
+                    sql += String.format("VALUES ('%s',%d,'%s',%d,'%s','%s')", membership.getName(),membership.getAge(),membership.getGender(),membership.getBirth(),membership.getUserID(),membership.getPassword());//???????????????????????
                     pstmt = conn.prepareStatement(sql);
-                    pstmt.setString(1, membership.getName());
-                    pstmt.setInt(2, membership.getAge());
-                    pstmt.setString(3, membership.getGender());
-                    pstmt.setInt(4, membership.getBirth());
-                    pstmt.setString(5, membership.getUserID());
-                    pstmt.setString(6, membership.getPassword());
                     int affectedRows = pstmt.executeUpdate();
-
                     System.out.println("affectedRows : " + affectedRows);
                 } catch (ClassNotFoundException e) {
                     System.out.println("드라이버 로딩 실패");
