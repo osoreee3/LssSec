@@ -19,53 +19,55 @@ public class App {
 
         MembershipController membershipController = new MembershipController();
 
-        while (true){
+        while (true) {
 
             System.out.printf("명령: ");
             String command = Container.getsc().nextLine().trim();
 
-            if(command.equals("종료")){
+            if (command.equals("종료")) {
                 break;
-            }else if(command.equals("회원가입")){
+            } else if (command.equals("회원가입")) {
                 membershipController.join();
                 Connection conn = null;
                 PreparedStatement pstmt = null;
 
-                try{
+                try {
+
+                    Membership membership = membershipController.membership;
 
                     Class.forName("com.mysql.cj.jdbc.Driver");
 
                     String url = "jdbc:mysql://127.0.0.1:3306/Membership_board?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul&useOldAliasMetadataBehavior=true&zeroDateTimeNehavior=convertToNull";
 
                     conn = DriverManager.getConnection(url, "root", "");
-
-
                     String sql = "INSERT INTO Membership ";
                     sql += "(`name`, age, gender, birth, userID, `password`) ";
-                    sql += "VALUES ('최기범', 30,'남',1993, 'taecoo1', 'rlqja123')";//???????????????????????
+                    sql += "VALUES (?, ?, ?, ?, ?, ?)";
                     pstmt = conn.prepareStatement(sql);
+                    pstmt.setString(1, membership.getName());
+                    pstmt.setInt(2, membership.getAge());
+                    pstmt.setString(3, membership.getGender());
+                    pstmt.setInt(4, membership.getBirth());
+                    pstmt.setString(5, membership.getUserID());
+                    pstmt.setString(6, membership.getPassword());
                     int affectedRows = pstmt.executeUpdate();
 
                     System.out.println("affectedRows : " + affectedRows);
-                }
-                catch(ClassNotFoundException e){
+                } catch (ClassNotFoundException e) {
                     System.out.println("드라이버 로딩 실패");
-                }
-                catch(SQLException e){
+                } catch (SQLException e) {
                     System.out.println("에러: " + e);
-                }
-                finally{
-                    try{
-                        if( conn != null && !conn.isClosed()){
+                } finally {
+                    try {
+                        if (conn != null && !conn.isClosed()) {
                             conn.close();
                         }
-                    }
-                    catch( SQLException e){
+                    } catch (SQLException e) {
                         e.printStackTrace();
                     }
                 }
 
-            }else if(command.equals("회원확인")){
+            } else if (command.equals("회원확인")) {
                 ManagerController.list();
                 Connection conn = null;
                 PreparedStatement pstmt = null;
@@ -94,12 +96,12 @@ public class App {
 
                         String name = rs.getString("name");
                         String gender = rs.getString("gender");
-                        String  userID = rs.getString("userID");
+                        String userID = rs.getString("userID");
                         String password = rs.getString("password");
                         int age = rs.getInt("age");
-                        int birth =rs.getInt("birth");
+                        int birth = rs.getInt("birth");
 
-                        Membership membership = new Membership(id, name,age, birth,  gender,  userID, password);
+                        Membership membership = new Membership(id, name, age, birth, gender, userID, password);
                         Membership_board.add(membership);
                     }
 
@@ -121,9 +123,9 @@ public class App {
                 }
 
 
-            }else if(command.equals("로그인")){
+            } else if (command.equals("로그인")) {
                 membershipController.login();
-            } else if(command.equals("도움말")) {
+            } else if (command.equals("도움말")) {
                 System.out.println("1. 회원가입");
                 System.out.println("2. 로그인");
                 System.out.println("9. 종료");

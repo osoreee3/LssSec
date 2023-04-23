@@ -64,5 +64,14 @@ public class Membership {
 
                 '}';
     }
+    public void setInfo(int id, String name, int age, int birth, String gender, String userID, String password){
+        this.id= id;
+        this.name = name;
+        this.age = age;
+        this.birth = birth;
+        this.gender = gender;
+        this.userID = userID;
+        this.password = password;
 
+    }
 }

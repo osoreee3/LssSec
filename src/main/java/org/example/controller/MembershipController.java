@@ -10,14 +10,13 @@ public class MembershipController {
 
     private int count = 1;
 
-    static ArrayList<Membership> memberships = new ArrayList<>();
+  static ArrayList<Membership> memberships = new ArrayList<>();
     public Membership membership =new Membership(1, "John Doe", 30,1994,"남", "johndoe123", "mypassword");
                                  //`name`, age, gender, birth, userID, `password`
     public void join() {
 
         System.out.println("이름을 입력해주세요.");
         String name = Container.getsc().nextLine().trim();
-
         System.out.println("나이를 입력해주세요");
         int age = Container.getsc().nextInt();
         Container.getsc().nextLine();
@@ -36,6 +35,7 @@ public class MembershipController {
         int id = count;
 
         memberships.add(new Membership(id, name, age, birth, gender, userID, password));
+        membership.setInfo(id, name, age, birth, gender, userID, password);
         count++;
     }
 
